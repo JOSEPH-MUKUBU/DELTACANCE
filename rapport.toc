@@ -1,0 +1,74 @@
+\babel@toc {french}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Objectif du projet}{3}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Contexte}{3}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Structure du projet}{3}{subsection.1.3}%
+\contentsline {section}{\numberline {2}Recherche et justification de la base de données}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Choix des datasets}{4}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Breast Cancer Dataset}{4}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Cancer Dataset (Général)}{4}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}Hybrid Dataset (Fusion Créée)}{5}{subsubsection.2.1.3}%
+\contentsline {section}{\numberline {3}Architecture logicielle}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Structure des fichiers du projet}{6}{subsection.3.1}%
+\contentsline {section}{\numberline {4}Analyse Exploratoire des Données (EDA)}{6}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Code du script d'analyse (\texttt {data\_analysis.py})}{6}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Explication technique}{7}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Analyse et sélection des attributs}{8}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Identification des attributs pertinents}{8}{subsection.5.1}%
+\contentsline {subsubsection}{\numberline {5.1.1}Breast Cancer}{8}{subsubsection.5.1.1}%
+\contentsline {subsubsection}{\numberline {5.1.2}Cancer Dataset}{8}{subsubsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.2}Exclusion d'attributs}{8}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Méthodes d'analyse utilisées}{8}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Nettoyage et préparation des données}{10}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Code du module de prétraitement (\texttt {preprocessing.py})}{10}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Traitement des valeurs manquantes}{11}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Gestion des valeurs aberrantes et incohérences}{11}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Transformations effectuées}{11}{subsection.6.4}%
+\contentsline {section}{\numberline {7}Implémentation des modèles de Machine Learning}{12}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Sélection et Implémentation Détaillée des Modèles}{12}{subsection.7.1}%
+\contentsline {subsubsection}{\numberline {7.1.1}Random Forest (Forêts Aléatoires)}{12}{subsubsection.7.1.1}%
+\contentsline {subsubsection}{\numberline {7.1.2}Support Vector Machine (SVM)}{12}{subsubsection.7.1.2}%
+\contentsline {subsubsection}{\numberline {7.1.3}Neural Network (MLPClassifier)}{13}{subsubsection.7.1.3}%
+\contentsline {subsection}{\numberline {7.2}Code du Pipeline d'Entraînement Unifié}{13}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Divison train-test}{14}{subsection.7.3}%
+\contentsline {section}{\numberline {8}Évaluation et comparaison des modèles}{15}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Critères d'évaluation}{15}{subsection.8.1}%
+\contentsline {subsubsection}{\numberline {8.1.1}Accuracy (Précision globale)}{15}{subsubsection.8.1.1}%
+\contentsline {subsubsection}{\numberline {8.1.2}Precision (Précision)}{15}{subsubsection.8.1.2}%
+\contentsline {subsubsection}{\numberline {8.1.3}Recall (Rappel)}{15}{subsubsection.8.1.3}%
+\contentsline {subsubsection}{\numberline {8.1.4}F1-Score}{15}{subsubsection.8.1.4}%
+\contentsline {subsubsection}{\numberline {8.1.5}Matrice de confusion}{15}{subsubsection.8.1.5}%
+\contentsline {subsection}{\numberline {8.2}Résultats}{15}{subsection.8.2}%
+\contentsline {subsubsection}{\numberline {8.2.1}Breast Cancer Dataset}{15}{subsubsection.8.2.1}%
+\contentsline {subsubsection}{\numberline {8.2.2}Cancer Dataset}{16}{subsubsection.8.2.2}%
+\contentsline {subsection}{\numberline {8.3}Comparaison et sélection du meilleur modèle}{16}{subsection.8.3}%
+\contentsline {section}{\numberline {9}Dernières Améliorations et Audit}{17}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Audit du code Python}{17}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Optimisation de l'Interface Utilisateur}{17}{subsection.9.2}%
+\contentsline {section}{\numberline {10}Détails de l'implémentation Backend (Symfony)}{18}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Gestion de l'Analyse (\texttt {AnalysisController.php})}{18}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}Gestion de l'Entraînement (\texttt {TrainController.php})}{18}{subsection.10.2}%
+\contentsline {subsection}{\numberline {10.3}Gestion des Prédictions (\texttt {PredictionController.php})}{19}{subsection.10.3}%
+\contentsline {section}{\numberline {11}Détails de l'implémentation Frontend (Twig \& JS)}{20}{section.11}%
+\contentsline {subsection}{\numberline {11.1}Structure de base (\texttt {base.html.twig})}{20}{subsection.11.1}%
+\contentsline {subsection}{\numberline {11.2}Validation de formulaire interactive (JavaScript)}{20}{subsection.11.2}%
+\contentsline {section}{\numberline {12}Conclusion}{22}{section.12}%
+\contentsline {subsection}{\numberline {12.1}Synthèse technique}{22}{subsection.12.1}%
+\contentsline {subsection}{\numberline {12.2}Résultats obtenus}{22}{subsection.12.2}%
+\contentsline {subsection}{\numberline {12.3}Perspectives}{22}{subsection.12.3}%
+\contentsline {subsection}{\numberline {12.4}Apports du projet}{22}{subsection.12.4}%
+\contentsline {section}{\numberline {13}Fusion et Logique Avancée}{22}{section.13}%
+\contentsline {subsection}{\numberline {13.1}Création du Dataset Hybride (\texttt {augment\_clinical\_data.py})}{22}{subsection.13.1}%
+\contentsline {subsection}{\numberline {13.2}Système de Suggestions Intelligentes (\texttt {predict.py})}{23}{subsection.13.2}%
+\contentsline {section}{\numberline {14}Présentation de l'Interface Utilisateur}{25}{section.14}%
+\contentsline {subsection}{\numberline {14.1}Page d'Accueil}{25}{subsection.14.1}%
+\contentsline {subsection}{\numberline {14.2}Gestion des Datasets}{25}{subsection.14.2}%
+\contentsline {subsection}{\numberline {14.3}Explorateur de Données (Data Explorer)}{26}{subsection.14.3}%
+\contentsline {subsection}{\numberline {14.4}Modélisation et Entraînement}{26}{subsection.14.4}%
+\contentsline {subsection}{\numberline {14.5}Module de Diagnostic (Prediction)}{27}{subsection.14.5}%
+\contentsline {subsection}{\numberline {14.6}Rapport de Prédiction (Résultat)}{27}{subsection.14.6}%
+\contentsline {section}{\numberline {15}Annexes Techniques : Code Source Complet}{28}{section.15}%
+\contentsline {subsection}{\numberline {15.1}Backend Controller : PredictionController.php}{28}{subsection.15.1}%
+\contentsline {subsection}{\numberline {15.2}Backend Controller : DataController.php}{29}{subsection.15.2}%
+\contentsline {subsection}{\numberline {15.3}Python : dataset\_info.py (Gestion Avancée des Données)}{31}{subsection.15.3}%
+\contentsline {section}{\numberline {16}Références}{36}{section.16}%

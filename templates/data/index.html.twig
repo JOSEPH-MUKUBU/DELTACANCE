@@ -1,0 +1,244 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }} - {{ data.dataset|default('Erreur') }}{% endblock %}
+
+{% block breadcrumb %}Data Explorer{% endblock %}
+
+{% block body %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div>
+                        <h4 class="fw-bold mb-1"><i class="fas fa-database me-2 text-primary"></i>Data Explorer</h4>
+                        <p class="text-muted small mb-0">Visualisez les données brutes des différents datasets.</p>
+                    </div>
+                    
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-cog me-1"></i> Actions
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" style="z-index: 1050;">
+                            <li><h6 class="dropdown-header text-uppercase small fw-bold">Basic</h6></li>
+                            <li><a class="dropdown-item py-2" href="{{ path('data_view', {'dataset': current_dataset, 'operation': 'head'}) }}"><i class="fas fa-align-justify me-2 text-primary"></i>Head (First 100)</a></li>
+                            <li><a class="dropdown-item py-2" href="{{ path('data_view', {'dataset': current_dataset, 'operation': 'tail'}) }}"><i class="fas fa-align-bottom me-2 text-primary"></i>Tail (Last 10)</a></li>
+                            <li><a class="dropdown-item py-2" href="{{ path('data_view', {'dataset': current_dataset, 'operation': 'sample'}) }}"><i class="fas fa-random me-2 text-primary"></i>Sample (Random 10)</a></li>
+                            
+                            <li><hr class="dropdown-divider my-1"></li>
+                            <li><h6 class="dropdown-header text-uppercase small fw-bold">Analysis</h6></li>
+                            
+                            <li><a class="dropdown-item py-2" href="{{ path('data_view', {'dataset': current_dataset, 'operation': 'describe'}) }}"><i class="fas fa-calculator me-2 text-success"></i>Describe (Stats)</a></li>
+                            <li><a class="dropdown-item py-2" href="{{ path('data_view', {'dataset': current_dataset, 'operation': 'info'}) }}"><i class="fas fa-info-circle me-2 text-info"></i>Info (Memory/Types)</a></li>
+                            
+                            <li><hr class="dropdown-divider my-1"></li>
+                            <li><h6 class="dropdown-header text-uppercase small fw-bold">Structure</h6></li>
+                            
+                            <li><a class="dropdown-item py-2" href="{{ path('data_view', {'dataset': current_dataset, 'operation': 'dtypes'}) }}"><i class="fas fa-fingerprint me-2 text-warning"></i>Types (dtypes)</a></li>
+                            <li><a class="dropdown-item py-2" href="{{ path('data_view', {'dataset': current_dataset, 'operation': 'isnull'}) }}"><i class="fas fa-exclamation-triangle me-2 text-danger"></i>Missing Values (isnull)</a></li>
+                            <li><a class="dropdown-item py-2" href="{{ path('data_view', {'dataset': current_dataset, 'operation': 'columns'}) }}"><i class="fas fa-columns me-2 text-secondary"></i>Columns List</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="btn-group">
+                        {% for key, name in datasets %}
+                        <a href="{{ path('data_view', {'dataset': key, 'limit': limit}) }}" 
+                           class="btn {% if current_dataset == key %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                           {{ name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if data.error is defined %}
+<div class="alert alert-danger">
+    <i class="fas fa-exclamation-triangle me-2"></i> {{ data.error }}
+</div>
+{% else %}
+
+<div class="row mb-3">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <div>
+            <span class="badge bg-secondary me-2">
+                {% if current_operation == 'info' %}
+                    Info
+                {% elseif current_operation == 'describe' %}
+                    Statistiques
+                {% else %}
+                    {{ data.data|length }} lignes affichées
+                {% endif %}
+            </span>
+            <span class="text-muted small">Opération: <strong>{{ current_operation|default('head')|upper }}</strong></span>
+        </div>
+        
+        {% if current_operation == 'head' %}
+        <form method="get" class="d-flex align-items-center">
+            <label for="limit" class="me-2 small fw-bold text-muted">Lignes à afficher:</label>
+            <select name="limit" id="limit" class="form-select form-select-sm border-0 bg-white shadow-sm" style="width: auto;" onchange="this.form.submit()">
+                <option value="10" {% if limit == 10 %}selected{% endif %}>10</option>
+                <option value="50" {% if limit == 50 %}selected{% endif %}>50</option>
+                <option value="100" {% if limit == 100 %}selected{% endif %}>100</option>
+                <option value="500" {% if limit == 500 %}selected{% endif %}>500</option>
+                <option value="1000" {% if limit == 1000 %}selected{% endif %}>1000</option>
+            </select>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        {% if current_operation == 'info' %}
+            <div class="p-4">
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card bg-light border-0">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted text-uppercase mb-2">Entrées (Lignes)</h6>
+                                <h3 class="fw-bold text-primary">{{ data.summary.rows }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light border-0">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted text-uppercase mb-2">Colonnes</h6>
+                                <h3 class="fw-bold text-success">{{ data.summary.columns }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light border-0">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted text-uppercase mb-2">Mémoire Utilisation</h6>
+                                <h3 class="fw-bold text-info">{{ data.summary.memory_usage }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="mb-3 fw-bold">Détails des Colonnes</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Colonne</th>
+                                <th>Non-Null Count</th>
+                                <th>Null %</th>
+                                <th>Dtype</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for col in data.data %}
+                            <tr>
+                                <td class="text-muted small">{{ loop.index }}</td>
+                                <td class="fw-bold">{{ col.column }}</td>
+                                <td>
+                                    {{ col.non_null_count }} 
+                                    <span class="text-muted small">/ {{ data.summary.rows }}</span>
+                                </td>
+                                <td>
+                                    {% if col.null_percentage > 0 %}
+                                        <span class="badge bg-warning text-dark">{{ col.null_percentage }}%</span>
+                                    {% else %}
+                                        <span class="badge bg-success">0%</span>
+                                    {% endif %}
+                                </td>
+                                <td><code>{{ col.dtype }}</code></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        {% elseif current_operation == 'columns' %}
+            <div class="p-3">
+                <div class="d-flex flex-wrap gap-2">
+                    {% for col in data.data %}
+                        <span class="badge bg-primary">{{ col }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            
+        {% elseif current_operation == 'dtypes' or current_operation == 'isnull' %}
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0" style="font-size: 0.85rem;">
+                    <thead class="table-light">
+                        <tr>
+                            {% if current_operation == 'dtypes' %}
+                                <th>Colonne</th>
+                                <th>Type</th>
+                            {% else %}
+                                <th>Colonne</th>
+                                <th>Manquants</th>
+                                <th>Pourcentage</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in data.data %}
+                            <tr>
+                                {% if current_operation == 'dtypes' %}
+                                    <td class="fw-bold">{{ row.column }}</td>
+                                    <td><code>{{ row.type }}</code></td>
+                                {% else %}
+                                    <td class="fw-bold">{{ row.column }}</td>
+                                    <td><span class="badge {% if row.missing > 0 %}bg-danger{% else %}bg-success{% endif %}">{{ row.missing }}</span></td>
+                                    <td>{{ row.percentage }}%</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        {% else %}
+            {# Table standard pour head, tail, sample, describe #}
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0" style="font-size: 0.85rem;">
+                    <thead class="table-light sticky-top">
+                        <tr>
+                            {% if current_operation != 'describe' %}
+                            <th class="text-center" style="width: 50px;">#</th>
+                            {% endif %}
+                            {% for col in data.columns %}
+                            <th style="min-width: 100px;">{{ col }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in data.data %}
+                        <tr>
+                            {% if current_operation != 'describe' %}
+                            <td class="text-center text-muted small">{{ loop.index }}</td>
+                            {% endif %}
+                            {% for cell in row %}
+                            <td>
+                                {% if cell is null %}
+                                    <span class="text-muted fst-italic">null</span>
+                                {% elseif cell == 'Alive' or cell == 'No' or cell == 'Low' %}
+                                    <span class="badge bg-light text-success border">{{ cell }}</span>
+                                {% elseif cell == 'Dead' or cell == 'Yes' or cell == 'High' %}
+                                    <span class="badge bg-light text-danger border">{{ cell }}</span>
+                                {% else %}
+                                    {{ cell }}
+                                {% endif %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

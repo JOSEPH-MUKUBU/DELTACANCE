@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumb %}Analyse Avancée{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <h2 class="mb-4"><i class="fas fa-chart-pie me-2"></i>Analyse Avancée</h2>
+    
+    <div class="row">
+        <!-- Feature Importance Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-primary">
+                <div class="card-header bg-primary text-white">
+                    <i class="fas fa-sort-amount-down me-2"></i>Feature Importance
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small">Visualisez l'importance relative de chaque variable dans la prédiction.</p>
+                    <div class="d-grid gap-2">
+                        {% for key, name in datasets %}
+                        <a href="{{ path('feature_importance', {'dataset': key}) }}" class="btn {% if key == 'hybrid_cancer' %}btn-primary border-2{% else %}btn-outline-primary{% endif %}">
+                            <i class="fas {% if key == 'hybrid_cancer' %}fa-dna{% else %}fa-database{% endif %} me-2"></i>{{ name }}
+                             {% if key == 'hybrid_cancer' %}<span class="badge bg-light text-primary ms-2">New</span>{% endif %}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ROC Curves Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-success">
+                <div class="card-header bg-success text-white">
+                    <i class="fas fa-chart-area me-2"></i>Courbes ROC
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small">Évaluez la performance avec les courbes ROC et scores AUC.</p>
+                    <div class="d-grid gap-2">
+                        {% for key, name in datasets %}
+                        <a href="{{ path('roc_curves', {'dataset': key, 'model': 'random_forest'}) }}" class="btn {% if key == 'hybrid_cancer' %}btn-success border-2{% else %}btn-outline-success{% endif %}">
+                            <i class="fas {% if key == 'hybrid_cancer' %}fa-dna{% else %}fa-database{% endif %} me-2"></i>{{ name }}
+                             {% if key == 'hybrid_cancer' %}<span class="badge bg-light text-success ms-2">New</span>{% endif %}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Confusion Matrix Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-info">
+                <div class="card-header bg-info text-white">
+                    <i class="fas fa-th me-2"></i>Matrice de Confusion
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small">Analysez les prédictions correctes et incorrectes par classe.</p>
+                    <div class="d-grid gap-2">
+                        {% for key, name in datasets %}
+                        <a href="{{ path('confusion_matrix', {'dataset': key, 'model': 'random_forest'}) }}" class="btn btn-outline-info btn-sm">
+                            {{ name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Cross-Validation Card -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 border-warning">
+                <div class="card-header bg-warning">
+                    <i class="fas fa-random me-2"></i>Validation Croisée (K-Fold)
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small">Évaluez la robustesse du modèle avec une validation croisée 5-Fold.</p>
+                    <div class="d-grid gap-2">
+                        {% for key, name in datasets %}
+                        <a href="{{ path('cross_validation', {'dataset': key, 'model': 'random_forest'}) }}" class="btn btn-outline-warning btn-sm">
+                            {{ name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Learning Curves Card -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 border-danger">
+                <div class="card-header bg-danger text-white">
+                    <i class="fas fa-graduation-cap me-2"></i>Courbes d'Apprentissage
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small">Diagnostiquez le biais/variance et détectez l'overfitting ou underfitting.</p>
+                    <div class="d-grid gap-2">
+                        {% for key, name in datasets %}
+                        <a href="{{ path('learning_curves', {'dataset': key, 'model': 'random_forest'}) }}" class="btn btn-outline-danger btn-sm">
+                            {{ name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

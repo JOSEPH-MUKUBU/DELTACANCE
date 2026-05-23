@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block breadcrumb %}Overview{% endblock %}
+
+{% block body %}
+<div class="row">
+    <!-- Stat Cards -->
+    <div class="col-md-3">
+        <div class="card p-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Datasets</h6>
+                    <h3 class="mb-0 fw-bold" style="color: var(--primary-accent);">2</h3>
+                </div>
+                <div class="rounded-pill p-3" style="background-color: rgba(77, 171, 247, 0.1);">
+                    <i class="fas fa-database" style="color: var(--primary-accent); font-size: 1.2rem;"></i>
+                </div>
+            </div>
+            <div class="mt-3" style="font-size: 0.75rem; color: #38d9a9;">
+                <i class="fas fa-arrow-up"></i> Breast & Risk Cancer
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card p-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted mb-1" style="font-size: 0.8rem; text-transform: uppercase ; letter-spacing: 0.5px;">Modèles ML</h6>
+                    <h3 class="mb-0 fw-bold" style="color: #fcc419;">3</h3>
+                </div>
+                <div class="rounded-pill p-3" style="background-color: rgba(252, 196, 25, 0.1);">
+                    <i class="fas fa-brain" style="color: #fcc419; font-size: 1.2rem;"></i>
+                </div>
+            </div>
+            <div class="mt-3" style="font-size: 0.75rem; color: #adb5bd;">
+                RF, SVM, Neural Network
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted mb-1" style="font-size: 0.8rem; text-transform: uppercase ; letter-spacing: 0.5px;">Précision Moyenne</h6>
+                    <h3 class="mb-0 fw-bold" style="color: #38d9a9;">94.2%</h3>
+                </div>
+                <div class="rounded-pill p-3" style="background-color: rgba(56, 217, 169, 0.1);">
+                    <i class="fas fa-check-circle" style="color: #38d9a9; font-size: 1.2rem;"></i>
+                </div>
+            </div>
+            <div class="mt-3" style="font-size: 0.75rem; color: #38d9a9;">
+                <i class="fas fa-arrow-up"></i> +2.4% vs last training
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted mb-1" style="font-size: 0.8rem; text-transform: uppercase ; letter-spacing: 0.5px;">Analyses lancées</h6>
+                    <h3 class="mb-0 fw-bold" style="color: #ff6b6b;">152</h3>
+                </div>
+                <div class="rounded-pill p-3" style="background-color: rgba(255, 107, 107, 0.1);">
+                    <i class="fas fa-chart-bar" style="color: #ff6b6b; font-size: 1.2rem;"></i>
+                </div>
+            </div>
+            <div class="mt-3" style="font-size: 0.75rem; color: #adb5bd;">
+                Total diagnostic attempts
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <!-- Big Chart area -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Model Performance Trend</span>
+                <i class="fas fa-ellipsis-h text-muted" style="cursor: pointer;"></i>
+            </div>
+            <div class="card-body">
+                <canvas id="performanceChart" height="280"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Side list -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">Recent Activity</div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item px-4 py-3 border-0">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-light p-2 me-3"><i class="fas fa-upload text-primary"></i></div>
+                            <div>
+                                <div class="fw-bold" style="font-size: 0.9rem;">Dataset Uploaded</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Breast_Cancer.csv updated</div>
+                            </div>
+                            <div class="ms-auto text-muted" style="font-size: 0.7rem;">2 min ago</div>
+                        </div>
+                    </li>
+                    <li class="list-group-item px-4 py-3 border-0">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-light p-2 me-3"><i class="fas fa-play text-success"></i></div>
+                            <div>
+                                <div class="fw-bold" style="font-size: 0.9rem;">Model Trained</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Random Forest (96% acc)</div>
+                            </div>
+                            <div class="ms-auto text-muted" style="font-size: 0.7rem;">45 min ago</div>
+                        </div>
+                    </li>
+                    <li class="list-group-item px-4 py-3 border-0">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-light p-2 me-3"><i class="fas fa-search text-warning"></i></div>
+                            <div>
+                                <div class="fw-bold" style="font-size: 0.9rem;">New Prediction</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Patient ID: #8429</div>
+                            </div>
+                            <div class="ms-auto text-muted" style="font-size: 0.7rem;">1 hour ago</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                datasets: [{
+                    label: 'Precision',
+                    data: [88, 89, 87, 92, 91, 94, 93, 95],
+                    borderColor: '#4dabf7',
+                    backgroundColor: 'rgba(77, 171, 247, 0.1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#4dabf7',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: { borderDash: [5, 5], color: '#f1f3f5' },
+                        suggestedMin: 80,
+                        suggestedMax: 100
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+

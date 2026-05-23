@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumb %}Historique{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-history me-2 text-primary"></i>{{ title }}</h2>
+        <div class="btn-group">
+            <a href="{{ path('export_history') }}" class="btn btn-outline-success">
+                <i class="fas fa-file-csv me-2"></i>Exporter CSV
+            </a>
+            <button type="button" class="btn btn-outline-danger" onclick="clearHistory()">
+                <i class="fas fa-trash me-2"></i>Effacer tout
+            </button>
+        </div>
+    </div>
+    
+    {% if count > 0 %}
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-list me-2"></i>{{ count }} prédiction(s) enregistrée(s)
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Dataset</th>
+                        <th>Modèle</th>
+                        <th>Prédiction</th>
+                        <th>Probabilité</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in history %}
+                    <tr>
+                        <td>{{ entry.id }}</td>
+                        <td>
+                            <small class="text-muted">
+                                {{ entry.timestamp|date('d/m/Y H:i') }}
+                            </small>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary">
+                                {{ entry.dataset|replace({'_': ' '})|title }}
+                            </span>
+                        </td>
+                        <td>{{ entry.model|replace({'_': ' '})|title }}</td>
+                        <td>
+                            <strong class="{% if entry.prediction in ['Alive', 'Low'] %}text-success{% elseif entry.prediction in ['Dead', 'High'] %}text-danger{% else %}text-warning{% endif %}">
+                                {{ entry.prediction }}
+                            </strong>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="progress flex-grow-1 me-2" style="height: 6px; width: 80px;">
+                                    <div class="progress-bar" style="width: {{ entry.probability * 100 }}%"></div>
+                                </div>
+                                <small>{{ (entry.probability * 100)|round(1) }}%</small>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-info" 
+                                    onclick="showDetails({{ entry|json_encode }})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                    onclick="generatePdf({{ entry|json_encode }})">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <i class="fas fa-inbox fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">Aucune prédiction enregistrée</h4>
+            <p class="text-muted">Les prédictions effectuées seront automatiquement sauvegardées ici.</p>
+            <a href="{{ path('prediction') }}" class="btn btn-primary">
+                <i class="fas fa-stethoscope me-2"></i>Faire une prédiction
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Modal pour les détails -->
+<div class="modal fade" id="detailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-info-circle me-2"></i>Détails de la prédiction</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="detailsContent">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+function showDetails(entry) {
+    let html = `
+        <div class="row">
+            <div class="col-md-6">
+                <h6>Résultat</h6>
+                <p><strong>Prédiction:</strong> ${entry.prediction}</p>
+                <p><strong>Probabilité:</strong> ${(entry.probability * 100).toFixed(1)}%</p>
+                <p><strong>Modèle:</strong> ${entry.model}</p>
+                <p><strong>Dataset:</strong> ${entry.dataset}</p>
+            </div>
+            <div class="col-md-6">
+                <h6>Données d'entrée</h6>
+                <ul class="list-unstyled">`;
+    
+    if (entry.input_data) {
+        for (const [key, value] of Object.entries(entry.input_data)) {
+            if (key !== 'model' && key !== 'dataset') {
+                html += `<li><strong>${key}:</strong> ${value}</li>`;
+            }
+        }
+    }
+    
+    html += `</ul></div></div>`;
+    
+    document.getElementById('detailsContent').innerHTML = html;
+    new bootstrap.Modal(document.getElementById('detailsModal')).show();
+}
+
+function clearHistory() {
+    if (confirm('Êtes-vous sûr de vouloir effacer tout l\'historique ?')) {
+        fetch('{{ path('clear_history') }}', {
+            method: 'POST',
+            headers: {'X-Requested-With': 'XMLHttpRequest'}
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            }
+        });
+    }
+}
+
+function generatePdf(entry) {
+    // Créer un formulaire caché pour soumettre les données
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{{ path('generate_report') }}';
+    
+    for (const [key, value] of Object.entries(entry)) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = typeof value === 'object' ? JSON.stringify(value) : value;
+        form.appendChild(input);
+    }
+    
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+}
+</script>
+{% endblock %}

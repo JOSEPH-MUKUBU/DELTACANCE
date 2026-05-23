@@ -1,0 +1,62 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+home:
+    path: /
+    controller: App\Controller\HomeController::index
+    methods: [GET]
+
+dataset:
+    path: /dataset
+    controller: App\Controller\DatasetController::index
+    methods: [GET]
+
+analysis:
+    path: /analysis
+    controller: App\Controller\AnalysisController::index
+    methods: [GET]
+
+analysis_dataset:
+    path: /analysis/{dataset}
+    controller: App\Controller\AnalysisController::analyze
+    methods: [GET]
+
+preprocessing:
+    path: /preprocessing
+    controller: App\Controller\PreprocessingController::index
+    methods: [GET]
+
+preprocess_dataset:
+    path: /preprocessing/{dataset}
+    controller: App\Controller\PreprocessingController::preprocess
+    methods: [GET, POST]
+
+train:
+    path: /train
+    controller: App\Controller\TrainController::index
+    methods: [GET]
+
+train_model:
+    path: /train/{model}
+    controller: App\Controller\TrainController::train
+    methods: [GET, POST]
+
+results:
+    path: /results
+    controller: App\Controller\ResultsController::index
+    methods: [GET]
+
+compare:
+    path: /compare
+    controller: App\Controller\CompareController::index
+    methods: [GET]
+
+prediction:
+    path: /prediction
+    controller: App\Controller\PredictionController::index
+    methods: [GET, POST]
+
+

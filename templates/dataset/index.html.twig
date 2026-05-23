@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block breadcrumb %}Datasets Overview{% endblock %}
+
+{% block body %}
+<div class="row">
+    {% for key, dataset in datasets %}
+    <div class="col-md-4 mb-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <span class="fw-bold">
+                    {% if key == 'breast_cancer' %}
+                        <i class="fas fa-file-medical me-2 text-primary"></i>
+                    {% elseif key == 'cancer' %}
+                        <i class="fas fa-user-shield me-2 text-success"></i>
+                    {% elseif key == 'hybrid_cancer' %}
+                        <i class="fas fa-dna me-2 text-info"></i>
+                    {% else %}
+                        <i class="fas fa-database me-2"></i>
+                    {% endif %}
+                    {{ dataset.name }}
+                </span>
+                {% if key == 'breast_cancer' %}
+                    <span class="badge rounded-pill bg-light text-primary border">Primary</span>
+                {% elseif key == 'cancer' %}
+                    <span class="badge rounded-pill bg-light text-success border">Preventive</span>
+                {% elseif key == 'hybrid_cancer' %}
+                    <span class="badge rounded-pill bg-light text-info border">Fusion</span>
+                {% endif %}
+            </div>
+            <div class="card-body p-4 d-flex flex-column">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="{% if key == 'breast_cancer' %}bg-primary{% elseif key == 'cancer' %}bg-success{% elseif key == 'hybrid_cancer' %}bg-info{% else %}bg-secondary{% endif %} text-white p-3 rounded-4 me-3">
+                        {% if key == 'breast_cancer' %}
+                            <i class="fas fa-microscope fa-2x"></i>
+                        {% elseif key == 'cancer' %}
+                            <i class="fas fa-heartbeat fa-2x"></i>
+                        {% elseif key == 'hybrid_cancer' %}
+                            <i class="fas fa-project-diagram fa-2x"></i>
+                        {% else %}
+                            <i class="fas fa-table fa-2x"></i>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h6 class="mb-0 fw-bold">{{ dataset.name }}</h6>
+                        <small class="text-muted">{{ dataset.instances }} instances</small>
+                    </div>
+                </div>
+                
+                <p class="text-muted small mb-4 flex-grow-1">{{ dataset.description }}</p>
+                
+                <div class="bg-light p-3 rounded-4 mb-4" style="font-size: 0.85rem;">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Features</span>
+                        <span class="fw-bold">{{ dataset.attributes }} Columns</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Target</span>
+                        <span class="badge bg-white text-dark shadow-xs" style="font-size: 0.7rem;">{{ dataset.target }}</span>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <a href="{{ path('analysis_dataset', {dataset: key}) }}" class="btn btn-primary-custom text-white" style="{% if key == 'cancer' %}background-color: #38d9a9;{% elseif key == 'hybrid_cancer' %}background-color: #17a2b8;{% endif %}">
+                        <i class="fas fa-chart-line me-2"></i> Open Analysis
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header py-3">
+                <span class="fw-bold"><i class="fas fa-info-circle me-2"></i> Methodological Notes</span>
+            </div>
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="d-flex">
+                            <i class="fas fa-check-circle text-primary me-3 mt-1"></i>
+                            <div>
+                                <h6 class="fw-bold mb-1">Clinic Relevance</h6>
+                                <p class="text-muted small mb-0">Directly linked to cancer diagnosis objectives.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="d-flex">
+                            <i class="fas fa-check-circle text-primary me-3 mt-1"></i>
+                            <div>
+                                <h6 class="fw-bold mb-1">Supervised Learning</h6>
+                                <p class="text-muted small mb-0">Clear target variables for classification.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex">
+                            <i class="fas fa-check-circle text-primary me-3 mt-1"></i>
+                            <div>
+                                <h6 class="fw-bold mb-1">Data Diversity</h6>
+                                <p class="text-muted small mb-0">Numerical, categorical, and temporal variations.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

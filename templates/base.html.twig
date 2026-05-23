@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Système d'aide au diagnostic médical{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --sidebar-color: #5c6b89;
+            --main-bg: #f5f7fa;
+            --card-bg: #ffffff;
+            --primary-accent: #4dabf7;
+            --sidebar-text: #a8b2c1;
+            --sidebar-active: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--main-bg);
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Style */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-color);
+            color: white;
+            padding-top: 20px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-brand {
+            padding: 20px 30px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+            flex-grow: 1;
+        }
+
+        .nav-item-dashboard {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-link-dashboard {
+            display: flex;
+            align-items: center;
+            padding: 12px 30px;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-link-dashboard i {
+            margin-right: 15px;
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-link-dashboard:hover, .nav-link-dashboard.active {
+            color: var(--sidebar-active);
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        .nav-link-dashboard.active {
+            border-left: 4px solid var(--primary-accent);
+        }
+
+        /* Main Content area */
+        .content-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Topbar Style */
+        .topbar {
+            height: 70px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+
+        .search-box {
+            background-color: #f1f3f5;
+            border-radius: 20px;
+            padding: 5px 20px;
+            width: 300px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            padding: 5px 10px;
+            width: 100%;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .user-profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #dee2e6;
+        }
+
+        /* Main Section */
+        .main-section {
+            padding: 30px 40px;
+        }
+
+        .breadcrumb-container {
+            margin-bottom: 25px;
+            font-size: 0.85rem;
+            color: #adb5bd;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            margin-bottom: 25px;
+        }
+
+        .card-header {
+            background: transparent;
+            border-bottom: 1px solid #f1f3f5;
+            padding: 15px 25px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .btn-primary-custom {
+            background-color: var(--primary-accent);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 20px;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .btn-primary-custom:hover {
+            opacity: 0.85;
+            color: white;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-brand">Dashboard</div>
+        <div class="nav-menu">
+            <ul class="nav-item-dashboard">
+                <li>
+                    <a href="{{ path('home') }}" class="nav-link-dashboard {% if app.request.attributes.get('_route') == 'home' %}active{% endif %}">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('dataset') }}" class="nav-link-dashboard {% if app.request.attributes.get('_route') == 'dataset' %}active{% endif %}">
+                        <i class="fas fa-database"></i> Datasets
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('data_index') }}" class="nav-link-dashboard {% if app.request.attributes.get('_route') starts with 'data_' %}active{% endif %}">
+                        <i class="fas fa-table"></i> Data Explorer
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('analysis') }}" class="nav-link-dashboard {% if app.request.attributes.get('_route') == 'analysis' %}active{% endif %}">
+                        <i class="fas fa-chart-line"></i> Analytics
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('preprocessing') }}" class="nav-link-dashboard {% if app.request.attributes.get('_route') == 'preprocessing' %}active{% endif %}">
+                        <i class="fas fa-broom"></i> Modeling
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-dashboard {% if app.request.attributes.get('_route') == 'train' %}active{% endif %}" href="{{ path('train') }}">
+                        <i class="fas fa-microchip"></i> <span>Modeling / Training</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-dashboard {% if app.request.attributes.get('_route') == 'prediction' %}active{% endif %}" href="{{ path('prediction') }}">
+                        <i class="fas fa-stethoscope"></i> <span>Diagnostic / Predict</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('advanced_analysis') }}" class="nav-link-dashboard {% if app.request.attributes.get('_route') starts with 'advanced' or app.request.attributes.get('_route') == 'feature_importance' or app.request.attributes.get('_route') == 'roc_curves' %}active{% endif %}">
+                        <i class="fas fa-chart-pie"></i> Advanced Analytics
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('compare') }}" class="nav-link-dashboard {% if app.request.attributes.get('_route') == 'compare' %}active{% endif %}">
+                        <i class="fas fa-balance-scale"></i> Compare
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('prediction_history') }}" class="nav-link-dashboard {% if app.request.attributes.get('_route') == 'prediction_history' %}active{% endif %}">
+                        <i class="fas fa-history"></i> History
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('prediction') }}" class="nav-link-dashboard {% if app.request.attributes.get('_route') == 'prediction' %}active{% endif %}">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link-dashboard">
+                        <i class="fas fa-question-circle"></i> Help
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <div class="topbar">
+            <div class="search-box">
+                <i class="fas fa-search text-muted"></i>
+                <input type="text" placeholder="Search...">
+            </div>
+            <div class="user-profile">
+                <span>Hi, Admin !</span>
+                <img src="https://ui-avatars.com/api/?name=Admin&background=4dabf7&color=fff" alt="User">
+            </div>
+        </div>
+
+        <div class="main-section">
+            <div class="breadcrumb-container">
+                Dashboard > {% block breadcrumb %}Overview{% endblock %}
+            </div>
+            
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>
+
+

@@ -1,0 +1,181 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block breadcrumb %}Analytics{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Breast Cancer Dataset</span>
+                <span class="badge" style="background-color: rgba(77, 171, 247, 0.1); color: var(--primary-accent); font-weight: 500;">CSV</span>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4" style="font-size: 0.9rem;">Statistiques descriptives, corrélations et visualisations des caractéristiques cliniques.</p>
+                <div id="results-breast">
+                    <div class="text-center py-4">
+                        <i class="fas fa-chart-pie fa-4x mb-3" style="color: #f1f3f5;"></i>
+                        <p class="text-muted" style="font-size: 0.85rem;">Prêt pour l'analyse...</p>
+                    </div>
+                </div>
+                <div id="loading-breast" class="loading">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mt-3">
+                    <button onclick="analyzeDataset('breast_cancer')" class="btn btn-primary-custom text-white">
+                        <i class="fas fa-chart-line me-2"></i> Lancer l'analyse complète
+                    </button>
+                    <a href="{{ path('analysis_dataset', {'dataset': 'breast_cancer'}) }}" class="btn btn-outline-primary">
+                        <i class="fas fa-images me-2"></i> Voir les Graphes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Cancer Risk Dataset</span>
+                <span class="badge" style="background-color: rgba(56, 217, 169, 0.1); color: #38d9a9; font-weight: 500;">CSV</span>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4" style="font-size: 0.9rem;">Étude des facteurs de risque et prédiction du niveau de sévérité.</p>
+                <div id="results-cancer">
+                    <div class="text-center py-4">
+                        <i class="fas fa-chart-area fa-4x mb-3" style="color: #f1f3f5;"></i>
+                        <p class="text-muted" style="font-size: 0.85rem;">Prêt pour l'analyse...</p>
+                    </div>
+                </div>
+                <div id="loading-cancer" class="loading">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mt-3">
+                    <button onclick="analyzeDataset('cancer')" class="btn btn-primary-custom text-white" style="background-color: #38d9a9;">
+                        <i class="fas fa-chart-line me-2"></i> Lancer l'analyse complète
+                    </button>
+                    <a href="{{ path('analysis_dataset', {'dataset': 'cancer'}) }}" class="btn btn-outline-success">
+                        <i class="fas fa-images me-2"></i> Voir les Graphes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Hybrid Dataset</span>
+                <span class="badge" style="background-color: rgba(23, 162, 184, 0.1); color: #17a2b8; font-weight: 500;">Fusion</span>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4" style="font-size: 0.9rem;">Dataset combiné enrichi avec facteurs de risque et données cliniques.</p>
+                <div id="results-hybrid">
+                    <div class="text-center py-4">
+                        <i class="fas fa-dna fa-4x mb-3" style="color: #f1f3f5;"></i>
+                        <p class="text-muted" style="font-size: 0.85rem;">Prêt pour l'analyse...</p>
+                    </div>
+                </div>
+                <div id="loading-hybrid" class="loading">
+                    <div class="spinner-border text-info" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mt-3">
+                    <button onclick="analyzeDataset('hybrid_cancer')" class="btn btn-primary-custom text-white" style="background-color: #17a2b8;">
+                        <i class="fas fa-chart-line me-2"></i> Lancer l'analyse complète
+                    </button>
+                    <a href="{{ path('analysis_dataset', {'dataset': 'hybrid_cancer'}) }}" class="btn btn-outline-info">
+                        <i class="fas fa-images me-2"></i> Voir les Graphes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function analyzeDataset(dataset) {
+    let type = 'breast';
+    if (dataset === 'cancer') type = 'cancer';
+    if (dataset === 'hybrid_cancer') type = 'hybrid';
+    
+    const loadingId = `loading-${type}`;
+    const resultsId = `results-${type}`;
+    
+    document.getElementById(loadingId).style.display = 'block';
+    document.getElementById(resultsId).style.display = 'none';
+    
+    fetch(`/analysis/${dataset}`, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById(loadingId).style.display = 'none';
+        document.getElementById(resultsId).style.display = 'block';
+        displayResults(resultsId, data);
+    })
+    .catch(error => {
+        document.getElementById(loadingId).style.display = 'none';
+        document.getElementById(resultsId).style.display = 'block';
+        document.getElementById(resultsId).innerHTML = '<div class="alert alert-danger">Erreur lors de l\'analyse</div>';
+    });
+}
+
+function displayResults(containerId, data) {
+    const container = document.getElementById(containerId);
+    let html = '<div class="analysis-results animate__animated animate__fadeIn">';
+    
+    if (data.statistics) {
+        html += '<h6 class="fw-bold mb-3" style="font-size: 0.8rem; text-transform: uppercase; color: #adb5bd;">Aperçu Statistique</h6>';
+        html += '<div class="table-responsive mb-4 bg-white rounded-4 border p-3">';
+        html += '<table class="table table-sm table-hover align-middle" style="font-size: 0.8rem;">';
+        html += '<thead class="table-light"><tr><th class="border-0">Variable</th><th class="border-0">Moyenne</th><th class="border-0">Médiane</th><th class="border-0">Ecart-type</th><th class="border-0">Min</th><th class="border-0">Max</th><th class="border-0">Manquant</th></tr></thead><tbody>';
+        
+        for (const [col, stats] of Object.entries(data.statistics)) {
+            html += `<tr>
+                <td class="fw-bold text-dark">${col}</td>
+                <td>${stats.mean !== null ? stats.mean.toFixed(2) : '-'}</td>
+                <td>${stats.median !== null ? stats.median.toFixed(2) : '-'}</td>
+                <td>${stats.std !== null ? stats.std.toFixed(2) : '-'}</td>
+                <td class="${stats.min < 0 ? 'text-danger fw-bold' : ''}">${stats.min}</td>
+                <td>${stats.max}</td>
+                <td>
+                    ${stats.missing > 0 
+                        ? `<span class="badge bg-danger-subtle text-danger border border-danger-subtle">${stats.missing}</span>` 
+                        : '<span class="badge bg-success-subtle text-success border border-success-subtle">0</span>'}
+                </td>
+            </tr>`;
+        }
+        html += '</tbody></table></div>';
+    }
+    
+    if (data.correlations) {
+        html += '<h6 class="fw-bold mb-3" style="font-size: 0.8rem; text-transform: uppercase; color: #adb5bd;">Corrélations Variables</h6>';
+        html += '<div class="table-responsive"><table class="table table-sm table-hover" style="font-size: 0.85rem;">';
+        html += '<thead><tr><th class="border-0">Var 1</th><th class="border-0">Var 2</th><th class="border-0 text-end">Score</th></tr></thead><tbody>';
+        data.correlations.slice(0, 5).forEach(corr => {
+            const opacity = Math.abs(corr.value);
+            html += `<tr>
+                <td class="py-2 border-0 text-muted">${corr.var1}</td>
+                <td class="py-2 border-0 text-muted">${corr.var2}</td>
+                <td class="py-2 border-0 text-end fw-bold" style="color: rgba(77, 171, 247, ${opacity + 0.2});">${corr.value.toFixed(3)}</td>
+            </tr>`;
+        });
+        html += '</tbody></table></div>';
+    }
+    
+    html += '</div>';
+    container.innerHTML = html;
+}
+</script>
+{% endblock %}
+
+

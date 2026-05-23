@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+<h1 class="mb-4"><i class="fas fa-broom"></i> {{ title }}</h1>
+
+{% if preprocessing %}
+    <div class="alert alert-success">
+        <h5><i class="fas fa-check-circle"></i> Preprocessing terminé avec succès!</h5>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5><i class="fas fa-info-circle"></i> Informations générales</h5>
+                </div>
+                <div class="card-body">
+                    {% if preprocessing.original_shape %}
+                        <p><strong>Shape original:</strong> {{ preprocessing.original_shape[0] }} lignes × {{ preprocessing.original_shape[1] }} colonnes</p>
+                    {% endif %}
+                    {% if preprocessing.final_shape %}
+                        <p><strong>Shape final:</strong> {{ preprocessing.final_shape[0] }} lignes × {{ preprocessing.final_shape[1] }} colonnes</p>
+                    {% endif %}
+                    <p><strong>Doublons supprimés:</strong> {{ preprocessing.duplicates }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5><i class="fas fa-tasks"></i> Étapes effectuées</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        {% if preprocessing.missing_values %}
+                            <li><i class="fas fa-check text-success"></i> Traitement des valeurs manquantes</li>
+                        {% endif %}
+                        {% if preprocessing.duplicates > 0 %}
+                            <li><i class="fas fa-check text-success"></i> Suppression des doublons</li>
+                        {% endif %}
+                        {% if preprocessing.encoding %}
+                            <li><i class="fas fa-check text-success"></i> Encodage des variables catégorielles</li>
+                        {% endif %}
+                        {% if preprocessing.normalization %}
+                            <li><i class="fas fa-check text-success"></i> Normalisation des données</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if preprocessing.missing_values %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5><i class="fas fa-exclamation-triangle"></i> Valeurs manquantes traitées</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Colonne</th>
+                                    <th>Nombre de valeurs manquantes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for col, count in preprocessing.missing_values %}
+                                {% if count > 0 %}
+                                <tr>
+                                    <td><strong>{{ col }}</strong></td>
+                                    <td>{{ count }}</td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if preprocessing.encoding %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5><i class="fas fa-code"></i> Variables encodées</h5>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        {% for col in preprocessing.encoding %}
+                        <li>{{ col }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> Le dataset préprocessé a été sauvegardé et est prêt pour l'entraînement des modèles.
+            </div>
+            <a href="{{ path('train') }}" class="btn btn-primary">
+                <i class="fas fa-brain"></i> Passer à l'entraînement des modèles
+            </a>
+        </div>
+    </div>
+{% else %}
+    <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i> Aucun résultat de preprocessing disponible. Veuillez lancer le preprocessing depuis la page principale.
+    </div>
+{% endif %}
+{% endblock %}
+
+

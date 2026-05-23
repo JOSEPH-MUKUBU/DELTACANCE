@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Cancer Prediction Form</title>
+</head>
+<body>
+<h1>Test Cancer Prediction</h1>
+
+<form method="POST" action="http://127.0.0.1:8000/prediction">
+    <input type="hidden" name="dataset" value="cancer">
+    
+    <label>Gender:</label>
+    <select name="gender">
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select>
+    <br><br>
+    
+    <label>Obesity:</label>
+    <select name="obesity">
+        <option value="Poids normal Surpoids">Normal / Overweight</option>
+        <option value="Obésité de classe I">Class I Obesity</option>
+        <option value="Obésité de classe II">Class II Obesity</option>
+        <option value="Obésité de classe III">Class III Obesity</option>
+        <option value="Obesité exteme">Extreme Obesity</option>
+    </select>
+    <br><br>
+    
+    <label>Smoking:</label>
+    <select name="smoking">
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+    <br><br>
+    
+    <label>Genetic Risk:</label>
+    <select name="genetic_risk">
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+        <option value="Maybe">Maybe</option>
+    </select>
+    <br><br>
+    
+    <button type="submit">Run Prediction</button>
+</form>
+
+</body>
+</html>

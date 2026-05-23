@@ -1,0 +1,207 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block breadcrumb %}Data Cleaning{% endblock %}
+
+{% block body %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-3 text-center border-end">
+                        <i class="fas fa-broom fa-4x mb-3 text-primary opacity-25"></i>
+                        <h5 class="fw-bold">Preprocessing Pipeline</h5>
+                    </div>
+                    <div class="col-md-9 ps-4">
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge rounded-pill bg-light text-primary border px-3 py-2"><i class="fas fa-search me-1"></i> Missing Values</span>
+                            <span class="badge rounded-pill bg-light text-primary border px-3 py-2"><i class="fas fa-filter me-1"></i> Outliers Detection</span>
+                            <span class="badge rounded-pill bg-light text-primary border px-3 py-2"><i class="fas fa-copy me-1"></i> Duplicates Removal</span>
+                            <span class="badge rounded-pill bg-light text-primary border px-3 py-2"><i class="fas fa-code me-1"></i> Features Encoding</span>
+                            <span class="badge rounded-pill bg-light text-primary border px-3 py-2"><i class="fas fa-expand-arrows-alt me-1"></i> Data Scaling</span>
+                        </div>
+                        <p class="text-muted small mt-3 mb-0">Notre pipeline automatisé assure que vos données sont prêtes pour un entraînement ML optimal en appliquant les meilleures pratiques de nettoyage.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <span class="fw-bold"><i class="fas fa-cube me-2"></i> Breast Cancer Prep</span>
+                <span class="badge bg-light text-primary small border">Ready</span>
+            </div>
+            <div class="card-body p-4">
+                <p class="text-muted small mb-4">Préparez le dataset Breast Cancer pour l'entraînement des modèles.</p>
+                
+                <div id="results-breast">
+                    <div class="text-center py-4 border rounded-4 border-dashed bg-light opacity-50">
+                        <p class="text-muted small mb-0">No cleaning performed yet</p>
+                    </div>
+                </div>
+                
+                <div id="loading-breast" class="loading">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                </div>
+                
+                <div class="d-grid mt-4">
+                    <button onclick="preprocessDataset('breast_cancer')" class="btn btn-primary-custom text-white">
+                        <i class="fas fa-magic me-2"></i> Run Preprocessing
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <span class="fw-bold"><i class="fas fa-cube me-2"></i> Cancer Risk Prep</span>
+                <span class="badge bg-light text-success small border">Ready</span>
+            </div>
+            <div class="card-body p-4">
+                <p class="text-muted small mb-4">Nettoyez et encodez le dataset Cancer Risk.</p>
+                
+                <div id="results-cancer">
+                    <div class="text-center py-4 border rounded-4 border-dashed bg-light opacity-50">
+                        <p class="text-muted small mb-0">No cleaning performed yet</p>
+                    </div>
+                </div>
+                
+                <div id="loading-cancer" class="loading">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                </div>
+                
+                <div class="d-grid mt-4">
+                    <button onclick="preprocessDataset('cancer')" class="btn btn-primary-custom text-white" style="background-color: #38d9a9;">
+                        <i class="fas fa-magic me-2"></i> Run Preprocessing
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <span class="fw-bold"><i class="fas fa-dna me-2"></i> Hybrid Prep</span>
+                <span class="badge bg-light text-info small border">Fusion</span>
+            </div>
+            <div class="card-body p-4">
+                <p class="text-muted small mb-4">Préparez le dataset Hybride pour l'optimisation avancée.</p>
+                
+                <div id="results-hybrid">
+                    <div class="text-center py-4 border rounded-4 border-dashed bg-light opacity-50">
+                        <p class="text-muted small mb-0">No cleaning performed yet</p>
+                    </div>
+                </div>
+                
+                <div id="loading-hybrid" class="loading">
+                    <div class="spinner-border text-info" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                </div>
+                
+                <div class="d-grid mt-4">
+                    <button onclick="preprocessDataset('hybrid_cancer')" class="btn btn-primary-custom text-white" style="background-color: #17a2b8;">
+                        <i class="fas fa-magic me-2"></i> Run Preprocessing
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function preprocessDataset(dataset) {
+    let type = 'breast';
+    if (dataset === 'cancer') type = 'cancer';
+    if (dataset === 'hybrid_cancer') type = 'hybrid';
+    
+    const loadingId = `loading-${type}`;
+    const resultsId = `results-${type}`;
+    
+    document.getElementById(loadingId).style.display = 'block';
+    document.getElementById(resultsId).style.display = 'none';
+    
+    fetch(`/preprocessing/${dataset}`, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById(loadingId).style.display = 'none';
+        document.getElementById(resultsId).style.display = 'block';
+        displayPreprocessingResults(resultsId, data);
+    })
+    .catch(error => {
+        document.getElementById(loadingId).style.display = 'none';
+        document.getElementById(resultsId).style.display = 'block';
+        document.getElementById(resultsId).innerHTML = '<div class="alert alert-danger">Erreur lors du preprocessing</div>';
+    });
+}
+
+function displayPreprocessingResults(containerId, data) {
+    const container = document.getElementById(containerId);
+    let html = '<div class="preprocessing-results animate__animated animate__fadeInUp">';
+    
+    // Resume global
+    html += '<div class="bg-light p-3 rounded-4 mb-3 border">';
+    html += `<div class="d-flex justify-content-between small mb-1"><span>Original Shape</span><span class="fw-bold text-muted">${data.original_shape ? data.original_shape.join(' × ') : 'N/A'}</span></div>`;
+    html += `<div class="d-flex justify-content-between small mb-1"><span>Final Shape</span><span class="fw-bold text-primary">${data.final_shape ? data.final_shape.join(' × ') : 'N/A'}</span></div>`;
+    if (data.duplicates > 0) {
+        html += `<div class="d-flex justify-content-between small text-warning"><span>Duplicates Removed</span><span class="fw-bold">${data.duplicates}</span></div>`;
+    }
+    html += '</div>';
+
+    // Detailed Audit Log Table
+    if (data.action_log && data.action_log.length > 0) {
+        html += '<h6 class="fw-bold small mb-2 text-uppercase text-muted ps-1">Journal des Actions de Nettoyage</h6>';
+        html += '<div class="table-responsive border rounded-3 overflow-hidden mb-3">';
+        html += '<table class="table table-sm table-striped mb-0" style="font-size: 0.75rem;">';
+        html += '<thead class="bg-light text-muted"><tr><th class="py-2 ps-3 border-0">Action</th><th class="py-2 border-0">Détails</th><th class="py-2 border-0 text-end pe-3">Colonnes Affectées</th></tr></thead>';
+        html += '<tbody>';
+        
+        data.action_log.forEach(item => {
+            let cols = '';
+            if (item.columns && item.columns.length > 0) {
+                if (item.columns.length > 3) {
+                     cols = `<span class="badge bg-white text-dark border">${item.columns.length} cols</span>`;
+                } else {
+                     cols = item.columns.map(c => `<span class="badge bg-white text-dark border me-1">${c}</span>`).join('');
+                }
+            } else {
+                cols = '<span class="text-muted fst-italic">-</span>';
+            }
+
+            html += `<tr>
+                <td class="ps-3 fw-bold text-dark py-2">${item.action}</td>
+                <td class="text-muted py-2">${item.details}</td>
+                <td class="text-end pe-3 py-2">${cols}</td>
+            </tr>`;
+        });
+        
+        html += '</tbody></table></div>';
+    }
+    
+    html += '<div class="d-flex justify-content-center mt-3">';
+    html += '<button class="btn btn-sm btn-outline-secondary rounded-pill px-3" disabled><i class="fas fa-check-circle me-1"></i> Preprocessing Complete</button>';
+    html += '</div>';
+    
+    html += '</div>';
+    container.innerHTML = html;
+}
+</script>
+{% endblock %}
+
+

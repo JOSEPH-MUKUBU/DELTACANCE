@@ -1,0 +1,106 @@
+{
+  "original_shape": [
+    780,
+    7
+  ],
+  "missing_values": {},
+  "duplicates": 870,
+  "features": [
+    "gender",
+    "Obesity",
+    "Smoking",
+    "Genetic Risk",
+    "Age",
+    "Age_Group"
+  ],
+  "target": "Cancer Prediction Level",
+  "categorical_features": [
+    "gender",
+    "Obesity",
+    "Smoking",
+    "Genetic Risk",
+    "Age_Group"
+  ],
+  "action_log": [
+    {
+      "action": "Suppression des colonnes non pertinentes",
+      "details": "Colonnes supprim\u00e9es : PatientID, first_name, last_name, BirthDate",
+      "columns": [
+        "PatientID",
+        "first_name",
+        "last_name",
+        "BirthDate"
+      ]
+    },
+    {
+      "action": "Fusion de deux colonnes",
+      "details": "Fusion de 'first_name' et 'last_name' pour cr\u00e9er 'Full_Name' (Simul\u00e9)",
+      "columns": [
+        "first_name",
+        "last_name"
+      ]
+    },
+    {
+      "action": "Calcul de la valeur 'Age'",
+      "details": "Calcul de l'\u00e2ge \u00e0 partir de 'BirthDate'",
+      "columns": [
+        "BirthDate",
+        "Age"
+      ]
+    },
+    {
+      "action": "Remplir les valeurs nulles",
+      "details": "Imputation par la m\u00e9diane (num\u00e9rique) ou le mode (cat\u00e9goriel)",
+      "columns": [
+        "gender",
+        "Obesity",
+        "Smoking",
+        "Genetic Risk",
+        "Cancer Prediction Level"
+      ]
+    },
+    {
+      "action": "Suppression des doublons",
+      "details": "Suppression de 870 lignes dupliqu\u00e9es",
+      "columns": [
+        "All"
+      ]
+    },
+    {
+      "action": "Cr\u00e9ation des tranches d\u2019Ages",
+      "details": "Segmentation de 'Age' en groupes (Young, Adult, Senior)",
+      "columns": [
+        "Age",
+        "Age_Group"
+      ]
+    },
+    {
+      "action": "Trier les donn\u00e9es",
+      "details": "Tri du dataset par 'Age' croissant",
+      "columns": [
+        "Age"
+      ]
+    },
+    {
+      "action": "Aggr\u00e9gation des donn\u00e9es",
+      "details": "Analyse agr\u00e9g\u00e9e effectu\u00e9e par 'Age_Group' sur 'Cancer Prediction Level'",
+      "columns": [
+        "Age_Group",
+        "Cancer Prediction Level"
+      ]
+    }
+  ],
+  "target_classes": [
+    "High",
+    "Low",
+    "Medium"
+  ],
+  "normalized_features": [
+    "gender",
+    "Obesity",
+    "Smoking",
+    "Genetic Risk",
+    "Age",
+    "Age_Group"
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "original_shape": [
+    4655,
+    20
+  ],
+  "missing_values": {},
+  "duplicates": 19,
+  "features": [
+    "Age",
+    "Race",
+    "Marital Status",
+    "T Stage ",
+    "N Stage",
+    "6th Stage",
+    "differentiate",
+    "Grade",
+    "A Stage",
+    "Tumor Size",
+    "Estrogen Status",
+    "Progesterone Status",
+    "Regional Node Examined",
+    "Reginol Node Positive",
+    "Survival Months",
+    "Obesity",
+    "Smoking",
+    "Genetic Risk",
+    "Age_Group"
+  ],
+  "target": "Status",
+  "categorical_features": [
+    "Race",
+    "Marital Status",
+    "T Stage ",
+    "N Stage",
+    "6th Stage",
+    "differentiate",
+    "Grade",
+    "A Stage",
+    "Estrogen Status",
+    "Progesterone Status",
+    "Obesity",
+    "Smoking",
+    "Genetic Risk",
+    "Age_Group"
+  ],
+  "action_log": [
+    {
+      "action": "Calcul de la valeur 'Age'",
+      "details": "La colonne 'Age' est d\u00e9j\u00e0 pr\u00e9sente et valid\u00e9e",
+      "columns": [
+        "Age"
+      ]
+    },
+    {
+      "action": "Remplir les valeurs nulles",
+      "details": "Imputation par la m\u00e9diane (num\u00e9rique) ou le mode (cat\u00e9goriel)",
+      "columns": [
+        "Age",
+        "Tumor Size",
+        "Regional Node Examined",
+        "Reginol Node Positive",
+        "Survival Months",
+        "Race",
+        "Marital Status",
+        "T Stage ",
+        "N Stage",
+        "6th Stage",
+        "differentiate",
+        "Grade",
+        "A Stage",
+        "Estrogen Status",
+        "Progesterone Status"
+      ]
+    },
+    {
+      "action": "Suppression des doublons",
+      "details": "Suppression de 19 lignes dupliqu\u00e9es",
+      "columns": [
+        "All"
+      ]
+    },
+    {
+      "action": "Cr\u00e9ation des tranches d\u2019Ages",
+      "details": "Segmentation de 'Age' en groupes (Young, Adult, Senior)",
+      "columns": [
+        "Age",
+        "Age_Group"
+      ]
+    },
+    {
+      "action": "Trier les donn\u00e9es",
+      "details": "Tri du dataset par 'Age' croissant",
+      "columns": [
+        "Age"
+      ]
+    },
+    {
+      "action": "Aggr\u00e9gation des donn\u00e9es",
+      "details": "Analyse agr\u00e9g\u00e9e effectu\u00e9e par 'Age_Group' sur 'Status'",
+      "columns": [
+        "Age_Group",
+        "Status"
+      ]
+    }
+  ],
+  "target_classes": [
+    "Alive",
+    "Dead"
+  ],
+  "normalized_features": [
+    "Age",
+    "Race",
+    "Marital Status",
+    "T Stage ",
+    "N Stage",
+    "6th Stage",
+    "differentiate",
+    "Grade",
+    "A Stage",
+    "Tumor Size",
+    "Estrogen Status",
+    "Progesterone Status",
+    "Regional Node Examined",
+    "Reginol Node Positive",
+    "Survival Months",
+    "Obesity",
+    "Smoking",
+    "Genetic Risk",
+    "Age_Group"
+  ]
+}

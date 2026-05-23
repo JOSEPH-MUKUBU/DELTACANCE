@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumb %}Analyse Avancée > Courbes d'Apprentissage{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-graduation-cap me-2 text-danger"></i>{{ title }}</h2>
+        <a href="{{ path('advanced_analysis') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Retour
+        </a>
+    </div>
+    
+    <!-- Model Selector -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center gap-3">
+                <strong>Modèle :</strong>
+                {% for key, name in models %}
+                <a href="{{ path('learning_curves', {'dataset': dataset, 'model': key}) }}" 
+                   class="btn {{ model == key ? 'btn-danger' : 'btn-outline-danger' }}">
+                    {{ name }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    {% if analysis.error is defined %}
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle me-2"></i>{{ analysis.error }}
+        </div>
+    {% elseif analysis.plot is defined %}
+        <div class="row">
+            <!-- Graph -->
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-line me-2"></i>Courbes d'Apprentissage
+                    </div>
+                    <div class="card-body text-center">
+                        <img src="data:image/png;base64,{{ analysis.plot }}" alt="Learning Curves" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Diagnosis -->
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-header 
+                        {% if analysis.diagnosis == 'Good Fit' %}bg-success{% elseif analysis.diagnosis == 'High Variance (Overfitting)' %}bg-warning{% else %}bg-danger{% endif %} text-white">
+                        <i class="fas fa-stethoscope me-2"></i>Diagnostic
+                    </div>
+                    <div class="card-body text-center">
+                        <h4 class="{% if analysis.diagnosis == 'Good Fit' %}text-success{% elseif analysis.diagnosis == 'High Variance (Overfitting)' %}text-warning{% else %}text-danger{% endif %}">
+                            {{ analysis.diagnosis }}
+                        </h4>
+                        <hr>
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="mb-1 text-muted small">Score Train</p>
+                                <h5 class="text-primary">{{ analysis.final_train_score }}%</h5>
+                            </div>
+                            <div class="col-6">
+                                <p class="mb-1 text-muted small">Score Test</p>
+                                <h5 class="text-danger">{{ analysis.final_test_score }}%</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Interpretation -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <i class="fas fa-lightbulb me-2"></i>Interprétation
+                    </div>
+                    <div class="card-body">
+                        {% if analysis.diagnosis == 'Good Fit' %}
+                        <div class="alert alert-success mb-0">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Le modèle généralise bien. Les scores d'entraînement et de validation sont proches.
+                        </div>
+                        {% elseif analysis.diagnosis == 'High Variance (Overfitting)' %}
+                        <div class="alert alert-warning mb-0">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Surapprentissage détecté.</strong> Le modèle mémorise les données d'entraînement. 
+                            Solutions : plus de données, régularisation, modèle plus simple.
+                        </div>
+                        {% else %}
+                        <div class="alert alert-danger mb-0">
+                            <i class="fas fa-times-circle me-2"></i>
+                            <strong>Sous-apprentissage détecté.</strong> Le modèle est trop simple.
+                            Solutions : modèle plus complexe, plus de features, moins de régularisation.
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-circle me-2"></i>Aucune donnée disponible.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,201 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block breadcrumb %}Dataset Analysis / {{ dataset }}{% endblock %}
+
+{% block body %}
+<div id="analysis-results">
+    {% if analysis %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                        <span class="fw-bold"><i class="fas fa-info-circle me-2"></i> Informations Générales</span>
+                        <span class="badge bg-light text-primary border">Metadata</span>
+                    </div>
+                    <div class="card-body p-4">
+                        {% if analysis.general_info %}
+                            <div class="row">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <div class="d-flex align-items-center p-3 bg-light rounded-4">
+                                        <div class="bg-primary text-white p-3 rounded-3 me-3">
+                                            <i class="fas fa-table fa-lg"></i>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 0.5px;">Dimensions</small>
+                                            <span class="fw-bold">{{ analysis.general_info.shape[0]|number_format }} samples × {{ analysis.general_info.shape[1] }} features</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center p-3 bg-light rounded-4">
+                                        <div class="bg-warning text-white p-3 rounded-3 me-3">
+                                            <i class="fas fa-copy fa-lg"></i>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 0.5px;">Duplicates</small>
+                                            <span class="fw-bold">{{ analysis.general_info.duplicates }} found</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% if analysis.statistics %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                        <span class="fw-bold"><i class="fas fa-calculator me-2"></i> Statistiques Descriptives</span>
+                        <i class="fas fa-th-list text-muted opacity-50"></i>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0 align-middle">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="ps-4 py-3 border-0 small text-uppercase text-muted">Feature</th>
+                                        <th class="py-3 border-0 small text-uppercase text-muted">Mean</th>
+                                        <th class="py-3 border-0 small text-uppercase text-muted">Median</th>
+                                        <th class="py-3 border-0 small text-uppercase text-muted">Std Dev</th>
+                                        <th class="py-3 border-0 small text-uppercase text-muted">Min</th>
+                                        <th class="py-3 border-0 small text-uppercase text-muted">Max</th>
+                                        <th class="pe-4 py-3 border-0 small text-uppercase text-muted">Missing</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for var, stats in analysis.statistics %}
+                                    <tr>
+                                        <td class="ps-4 fw-bold text-dark">{{ var }}</td>
+                                        <td>{{ stats.mean|number_format(2) }}</td>
+                                        <td>{{ stats.median|number_format(2) }}</td>
+                                        <td>{{ stats.std|number_format(2) }}</td>
+                                        <td>{{ stats.min|number_format(2) }}</td>
+                                        <td>{{ stats.max|number_format(2) }}</td>
+                                        <td class="pe-4">
+                                            {% if stats.missing > 0 %}
+                                                <span class="badge bg-light text-danger border border-danger-subtle">{{ stats.missing }}</span>
+                                            {% else %}
+                                                <span class="badge bg-light text-success border border-success-subtle">0</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Sélecteur de Graphes et Affichage -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <span class="fw-bold text-white"><i class="fas fa-chart-bar me-2"></i> Visualisations Détaillées</span>
+                        <span class="badge bg-white text-primary">Graphiques Interactifs</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <label for="plot-selector" class="form-label fw-bold text-dark" style="font-size: 0.95rem;">Sélectionnez un Graphe:</label>
+                                <select id="plot-selector" class="form-select border-0 bg-light rounded-3 py-2 shadow-sm">
+                                    <optgroup label="📈 Analyses Principales">
+                                        {% if analysis.plots %}
+                                            {% for plot_key, plot_data in analysis.plots %}
+                                                <option value="{{ plot_key }}">{{ plot_data.title }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="col-md-8">
+                                <div id="plot-info" class="p-3 bg-gradient rounded-4" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);">
+                                    <h6 class="fw-bold text-dark mb-2" id="current-plot-title">
+                                        <i class="fas fa-info-circle text-primary me-2"></i> Informations
+                                    </h6>
+                                    <p class="text-muted small mb-0" id="plot-description-text">
+                                        Sélectionnez un graphe pour afficher sa description
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Affichage du Graphe -->
+                        <div class="plot-container bg-light p-4 rounded-4" style="min-height: 500px;">
+                            <div id="plot-image-container" class="text-center">
+                                {% if analysis.plots %}
+                                    {% set first_key = analysis.plots|keys|first %}
+                                    {% set first_plot = analysis.plots[first_key] %}
+                                    <img id="current-plot-image" src="{{ first_plot.image }}" alt="Graphe" style="max-width: 100%; max-height: 500px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Données des plots depuis Python
+            const plotsData = {{ analysis.plots|json_encode|raw }};
+            const plotSelector = document.getElementById('plot-selector');
+            const currentPlotImage = document.getElementById('current-plot-image');
+            const currentPlotTitle = document.getElementById('current-plot-title');
+            const plotDescriptionText = document.getElementById('plot-description-text');
+
+            // Fonction pour mettre à jour l'affichage
+            function updatePlot(plotKey) {
+                const plot = plotsData[plotKey];
+                if (plot) {
+                    currentPlotImage.src = plot.image;
+                    currentPlotImage.style.maxWidth = '100%';
+                    currentPlotImage.style.maxHeight = '500px';
+                    currentPlotImage.style.borderRadius = '8px';
+                    currentPlotImage.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+                    
+                    currentPlotTitle.innerHTML = `<i class="fas fa-chart-line text-primary me-2"></i> ${plot.title}`;
+                    plotDescriptionText.textContent = plot.description;
+                }
+            }
+
+            // Event listener pour le changement de sélection
+            plotSelector.addEventListener('change', function() {
+                updatePlot(this.value);
+            });
+
+            // Initialiser avec le premier graphe
+            if (Object.keys(plotsData).length > 0) {
+                const firstKey = Object.keys(plotsData)[0];
+                plotSelector.value = firstKey;
+                updatePlot(firstKey);
+            }
+        });
+        </script>
+        
+    {% else %}
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-5 text-center">
+                <div class="bg-light p-4 rounded-circle d-inline-block mb-4">
+                    <i class="fas fa-exclamation-triangle fa-3x text-warning opacity-50"></i>
+                </div>
+                <h5 class="fw-bold">No Analysis Data Available</h5>
+                <p class="text-muted small mb-4">Please launch the analysis from the main dashboard to generate statistics.</p>
+                <a href="{{ path('analysis') }}" class="btn btn-primary-custom text-white px-4">
+                    <i class="fas fa-arrow-left me-2"></i> Go to Analysis Home
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
