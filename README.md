@@ -2,7 +2,7 @@
 
 Application web moderne développée avec Symfony pour la prédiction du cancer à partir de données médicales en utilisant des techniques de Machine Learning. Ce système intègre une interface conviviale pour l'exploration des données, l'analyse statistique, l'entraînement de modèles ML et la prédiction sur de nouvelles données.
 
-## 📋 Description du projet
+##  Description du projet
 
 DELTACANCE est un système d'aide au diagnostic médical permettant de prédire le cancer à partir de deux datasets complets :
 - **Breast_Cancer.csv** : Dataset sur le cancer du sein avec 4000+ instances et 16 attributs cliniques et pathologiques
@@ -14,7 +14,7 @@ DELTACANCE est un système d'aide au diagnostic médical permettant de prédire 
 - Fournir une interface web intuitive pour la prédiction et l'aide au diagnostic
 - Visualiser les corrélations et distributions des données médicales
 
-## 🚀 Fonctionnalités principales
+##  Fonctionnalités principales
 
 ### 1. **Exploration des données (Data Explorer)**
 - Visualisation complète des datasets disponibles
@@ -51,7 +51,7 @@ Trois algorithmes de machine learning implémentés et optimisés :
 - Affichage des résultats et probabilités
 - Interprétabilité des prédictions
 
-## 🎨 Interface utilisateur
+##  Interface utilisateur
 
 ### Accueil
 Page d'accueil présentant une vue d'ensemble du projet et de ses fonctionnalités.
@@ -81,7 +81,7 @@ Formulaire pour effectuer des prédictions sur de nouvelles données.
 Tableau comparatif avec les performances de tous les modèles.
 ![Modeling Comparison](capture/modeling.png)
 
-## 📊 Analyses et visualisations générées
+##  Analyses et visualisations générées
 
 ### Matrice de corrélation - Cancer du sein
 Analyse des corrélations entre les attributs du dataset Breast Cancer.
@@ -107,7 +107,7 @@ Analyse détaillée de la distribution des âges.
 Analyse détaillée de la distribution des tailles de tumeur.
 ![Histogram Tumor Size](images/hist_breast_cancer_Tumor_Size.png)
 
-## 📦 Installation
+##  Installation
 
 ### Prérequis
 
@@ -157,14 +157,14 @@ php -S localhost:8000 -t public
 pip install -r python_scripts/requirements.txt
 ```
 
-## 📁 Structure du projet
+##  Structure du projet
 
 ```
 DELTACANCE/
-├── 📂 public/                    # Point d'entrée web (frontend)
+├──  public/                    # Point d'entrée web (frontend)
 │   └── index.php                 # Bootstrap de l'application
 │
-├── 📂 src/                       # Code source Symfony (backend)
+├──  src/                       # Code source Symfony (backend)
 │   └── Controller/               # Contrôleurs de l'application
 │       ├── DatasetController.php       # Gestion des datasets
 │       ├── AnalysisController.php      # Analyse statistique
@@ -173,7 +173,7 @@ DELTACANCE/
 │       ├── PredictionController.php    # Prédictions
 │       └── ComparisonController.php    # Comparaison des modèles
 │
-├── 📂 templates/                 # Templates Twig (vues)
+├──  templates/                 # Templates Twig (vues)
 │   ├── base.html.twig           # Template de base
 │   ├── home.html.twig           # Page d'accueil
 │   ├── datasets.html.twig       # Liste des datasets
@@ -183,12 +183,12 @@ DELTACANCE/
 │   ├── prediction.html.twig     # Formulaire de prédiction
 │   └── comparison.html.twig     # Comparaison des résultats
 │
-├── 📂 config/                    # Configuration Symfony
+├──  config/                    # Configuration Symfony
 │   ├── bundles.php
 │   ├── packages/
 │   └── routes.yaml
 │
-├── 📂 python_scripts/            # Scripts Python ML
+├──  python_scripts/            # Scripts Python ML
 │   ├── dataset_info.py           # Analyse des datasets
 │   ├── data_analysis.py          # Statistiques et visualisations
 │   ├── preprocessing.py          # Nettoyage et normalisation
@@ -196,7 +196,7 @@ DELTACANCE/
 │   ├── predict.py                # Module de prédiction
 │   └── requirements.txt           # Dépendances Python
 │
-├── 📂 capture/                   # Captures d'écran de l'interface
+├──  capture/                   # Captures d'écran de l'interface
 │   ├── home.png
 │   ├── dataset.png
 │   ├── data explorer.png
@@ -205,7 +205,7 @@ DELTACANCE/
 │   ├── predict.png
 │   └── modeling.png
 │
-├── 📂 images/                    # Visualisations des données
+├──  images/                    # Visualisations des données
 │   ├── corr_breast_cancer.png    # Matrice de corrélation
 │   ├── corr_cancer.png
 │   ├── dist_breast_cancer.png    # Distributions
@@ -213,24 +213,24 @@ DELTACANCE/
 │   ├── hist_breast_cancer_Age.png
 │   └── hist_breast_cancer_Tumor_Size.png
 │
-├── 📊 Datasets
+├──  Datasets
 │   ├── Breast_Cancer.csv         # Dataset cancer du sein (4000+ lignes, 16 colonnes)
 │   ├── Cancer_Dataset.csv        # Dataset patients (1000+ lignes, 9 colonnes)
 │   └── Hybrid_Cancer_Dataset.csv # Dataset hybride combiné
 │
-├── 📄 Fichiers de configuration
+├──  Fichiers de configuration
 │   ├── composer.json             # Dépendances PHP
 │   ├── composer.lock
 │   ├── symfony.lock
 │   ├── .env                      # Variables d'environnement
 │   ├── .gitignore
 │
-├── 📝 Documentation
+├──  Documentation
 │   ├── README.md                 # Ce fichier
 │   ├── rapport.tex               # Rapport LaTeX complet
 │   └── rapport.toc               # Table des matières
 │
-└── 🚀 Scripts de lancement
+└──  Scripts de lancement
     ├── DEMARRER.bat              # Script de démarrage Windows
     ├── LANCER_PROJET.bat
     ├── CORRIGER_ERREUR.bat
@@ -239,7 +239,7 @@ DELTACANCE/
     └── fix_error.ps1
 ```
 
-## 🛠️ Stack technique
+##  Stack technique
 
 ### Backend
 - **PHP 8.1+** : Langage de programmation serveur
@@ -264,7 +264,7 @@ DELTACANCE/
 - **CSV** : Format de stockage des datasets
 - **JSON** : Format pour les résultats d'analyse
 
-## 🧠 Processus de Machine Learning implémenté
+##  Processus de Machine Learning implémenté
 
 ### 1. **Data Collection**
 - Importation des datasets Breast_Cancer.csv et Cancer_Dataset.csv
@@ -327,7 +327,7 @@ Métriques complètes pour chaque modèle :
 - Affichage des probabilités et confiance
 - Explication des résultats
 
-## 📊 Datasets
+##  Datasets
 
 ### Breast_Cancer.csv
 - **Description** : Dataset complet sur le cancer du sein
@@ -350,7 +350,7 @@ Métriques complètes pour chaque modèle :
 - **Création** : Fusion intelligente de Breast_Cancer et Cancer_Dataset
 - **Avantages** : Plus complet, meilleure représentation
 
-## 📈 Résultats obtenus
+##  Résultats obtenus
 
 (À compléter avec les métriques réelles après entraînement)
 
@@ -360,7 +360,7 @@ Métriques complètes pour chaque modèle :
 
 **Meilleur modèle** : [À déterminer selon les résultats]
 
-## 📦 Installation et configuration
+##  Installation et configuration
 
 ### Prérequis système
 
@@ -447,52 +447,52 @@ Des scripts PowerShell et batch sont fournis pour automatiser l'installation :
 
 L'application est structurée en 7 sections principales :
 
-#### 1. **🏠 Accueil**
+#### 1. **Accueil**
 - Vue d'ensemble du projet
 - Présentation des objectifs et fonctionnalités
 - Accès rapide aux sections principales
 
-#### 2. **📊 Exploration des Datasets**
+#### 2. **Exploration des Datasets**
 - Visualisation des datasets disponibles
 - Informations sur chaque dataset (nb lignes, colonnes, types)
 - Aperçu des premières lignes
 - Statistiques sommaires
 
-#### 3. **📈 Data Explorer (Analyse)**
+#### 3. **Data Explorer (Analyse)**
 - Statistiques descriptives complètes
 - Visualisation des distributions
 - Matrices de corrélation
 - Détection des valeurs manquantes
 - Histogrammes et box plots
 
-#### 4. **🔧 Preprocessing**
+#### 4. **Preprocessing**
 - Visualisation du preprocessing effectué
 - Détails sur le traitement des valeurs manquantes
 - Information sur l'encodage des variables catégorielles
 - Résumé de la normalisation appliquée
 
-#### 5. **🤖 Training (Entraînement)**
+#### 5. **Training (Entraînement)**
 - Formulaire pour configurer l'entraînement
 - Sélection des modèles à entraîner
 - Paramètres d'entraînement ajustables
 - Statut d'avancement en temps réel
 - Affichage des résultats bruts
 
-#### 6. **📊 Comparaison des Modèles**
+#### 6. **Comparaison des Modèles**
 - Tableau comparatif de tous les modèles
 - Métriques côte à côte (Accuracy, Precision, Recall, F1)
 - Graphiques comparatifs
 - Classement des modèles
 - Sélection du meilleur modèle
 
-#### 7. **🎯 Prédiction**
+#### 7. **Prédiction**
 - Formulaire interactif pour entrer les données d'un patient
 - Validation des entrées en temps réel
 - Prédiction avec le meilleur modèle
 - Affichage de la probabilité et confiance
 - Interprétation du résultat
 
-## 🚀 Flux de travail recommandé
+## Flux de travail recommandé
 
 1. **Démarrer l'application** : `php -S localhost:8000 -t public`
 2. **Consulter l'accueil** : Comprendre les objectifs
@@ -502,7 +502,7 @@ L'application est structurée en 7 sections principales :
 6. **Comparer les résultats** : Évaluer la performance des modèles
 7. **Faire des prédictions** : Utiliser le meilleur modèle pour prédire
 
-## 🐛 Dépannage
+##  Dépannage
 
 ### Erreur : "PHP not found"
 Assurez-vous que PHP est correctement installé et ajouté au PATH système.
@@ -526,7 +526,7 @@ php -S localhost:8001 -t public
 - `CORRIGER_ERREUR.bat` : Corrige les erreurs courantes
 - `fix_error.ps1` : Version PowerShell du correcteur d'erreurs
 
-## 📚 Ressources et documentation
+##  Ressources et documentation
 
 ### Fichiers de documentation
 - **rapport.tex** : Rapport complet en LaTeX (générez le PDF avec `pdflatex rapport.tex`)
@@ -541,7 +541,7 @@ php -S localhost:8001 -t public
 - [Kaggle Datasets](https://www.kaggle.com/datasets)
 - [UCI ML Repository](https://archive.ics.uci.edu/ml/)
 
-## 👥 Contribution et support
+##  Contribution et support
 
 ### Rapporter un bug
 Si vous rencontrez un problème, vérifiez d'abord le fichier `DEMARRER.bat` ou `CORRIGER_ERREUR.bat`.
@@ -554,19 +554,19 @@ Si vous rencontrez un problème, vérifiez d'abord le fichier `DEMARRER.bat` ou 
 - Application mobile pour les prédictions
 - Export des résultats en PDF/Excel
 
-## 👨‍💻 Auteur et équipe
+##  Auteur et équipe
 
 **Projet DELTACANCE** - Système d'aide au diagnostic médical
 
----
+JOSEPH MUKUBU KAPOYA
 
-## 📄 Licence
+##  Licence
 
 MIT License - Libre d'utilisation et de modification
 
 Voir le fichier LICENSE pour plus de détails.
 
-## 📞 Support et Contact
+##  Support et Contact
 
 Pour toute question ou problème :
 1. Consultez la documentation dans le rapport.tex
